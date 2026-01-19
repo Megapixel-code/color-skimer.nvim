@@ -3,7 +3,7 @@ INTERFACE = {
    buf_id = nil,
    win_id = nil,
 }
-SETTINGS = {}
+COLORSCHEME_PARAMS = {}
 
 -- [[ SETUP ]]
 
@@ -74,7 +74,7 @@ end
 --- }
 --- @param options_table table
 --- @return table
-local function get_init_tables(options_table)
+local function get_colorscheme_params(options_table)
    local default = get_default_options()
 
    local result = {}
@@ -161,9 +161,23 @@ end
 
 -- [[ UTILS ]]
 
+--- this gets the colorscheme id with the colorscheme name
+local function get_colorscheme_id(colorscheme)
+   for id, colorscheme_param in ipairs(COLORSCHEME_PARAMS) do
+      if colorscheme == colorscheme_param.colorscheme then
+         return id
+      end
+   end
+
+   return 0
+end
+
 --- this will preview the colorscheme, we execute pre and post functions to
 --- make sure the colorscheme is displayed correcly.
 local function display_colorscheme(colorscheme_params)
+   -- TODO: add verify if we have not aleready displayed this theme
+   --       by looking at the current theme
+
    colorscheme_params.pre_function()
 
    vim.cmd("colorscheme " .. colorscheme_params.colorscheme)
@@ -178,17 +192,33 @@ local function save_colorscheme(colorscheme_params)
 
    display_colorscheme(colorscheme_params)
 
-   -- TODO: add save to file
-
    colorscheme_params.post_callback()
+
+   -- saving the file
+   local data_home = os.getenv("XDG_DATA_HOME")
+   if data_home == nil then
+      data_home = os.getenv("HOME") .. "/.local/share"
+   end
+
+   local file_dir = data_home .. "/nvim/" .. PLUGIN_NAME
+   os.execute("mkdir -p " .. file_dir)
+   local file, err = io.open(file_dir .. "/data", "w")
+
+   if file then
+      local plugin_number = get_colorscheme_id(colorscheme_params.colorscheme)
+      file:write(tostring(plugin_number))
+      file:close()
+   else
+      print("Could not save colorscheme to memory, err :", err)
+   end
 end
 
 local function write_to_buf()
    local lines = {}
 
-   for _, colorscheme_params in ipairs(SETTINGS) do
+   for _, colorscheme_param in ipairs(COLORSCHEME_PARAMS) do
       vim.list_extend(lines, {
-         colorscheme_params.name
+         colorscheme_param.name
       })
    end
 
@@ -232,11 +262,46 @@ local function close_win()
    }
 end
 
+local function cursor_moved(interface)
+   local line = vim.api.nvim_win_get_cursor(interface.win_id)[1]
+   display_colorscheme(COLORSCHEME_PARAMS[line])
+end
+
+local function setup_win_config()
+   -- buf options
+   vim.api.nvim_set_option_value("filetype", PLUGIN_NAME, { buf = INTERFACE.buf_id })
+   vim.api.nvim_set_option_value("modifiable", false, { buf = INTERFACE.buf_id })
+
+   -- win options
+   vim.api.nvim_set_option_value("cursorline", true, { win = INTERFACE.win_id })
+   vim.api.nvim_set_option_value("scrolloff", 4, { win = INTERFACE.win_id })
+
+   -- autocmds
+   local group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-WINCONFIG", { clear = true })
+   vim.api.nvim_create_autocmd("CursorMoved", {
+      group = group,
+      buffer = INTERFACE.buf_id,
+      callback = function()
+         cursor_moved(INTERFACE)
+      end
+   })
+
+   -- TODO: make it configurable (<CR>)
+   vim.api.nvim_set_keymap("n", "<CR>", "", {
+      callback = function()
+         local line = vim.api.nvim_win_get_cursor(INTERFACE.win_id)[1]
+         save_colorscheme(COLORSCHEME_PARAMS[line])
+         close_win()
+      end
+   })
+end
+
+
 local function setup_win_closing()
    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = INTERFACE.buf_id })
 
    vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
-      group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-augroup", { clear = true }),
+      group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-WINCLOSING", { clear = true }),
       buffer = INTERFACE.buf_id,
       callback = function()
          close_win()
@@ -282,14 +347,7 @@ local function toggle_win()
    }
 
    setup_win_closing()
-
-   -- buf options
-   vim.api.nvim_set_option_value("filetype", PLUGIN_NAME, { buf = INTERFACE.buf_id })
-   vim.api.nvim_set_option_value("modifiable", false, { buf = INTERFACE.buf_id })
-
-   -- win options
-   vim.api.nvim_set_option_value("cursorline", true, { win = INTERFACE.win_id })
-   vim.api.nvim_set_option_value("scrolloff", 4, { win = INTERFACE.win_id })
+   setup_win_config()
 
    write_to_buf()
 end
@@ -299,7 +357,7 @@ end
 
 
 local function setup(opts)
-   SETTINGS = get_init_tables(opts)
+   COLORSCHEME_PARAMS = get_colorscheme_params(opts)
 
    -- display_colorscheme( SETTINGS[1] )
    -- save_colorscheme( SETTINGS[1] )
