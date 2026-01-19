@@ -3,6 +3,7 @@ INTERFACE = {
    buf_id = nil,
    win_id = nil,
 }
+SETTINGS = {}
 
 -- [[ SETUP ]]
 
@@ -40,13 +41,21 @@ local function get_default_options()
          "zellner",
       },
 
-      name_override = nil,
+      name_override = {},
 
-      pre_function = function() end,
-      post_function = function() end,
+      pre_function = {
+         ["*"] = function() end
+      },
+      post_function = {
+         ["*"] = function() end
+      },
 
-      pre_callback = function() end,
-      post_callback = function() end,
+      pre_callback = {
+         ["*"] = function() end
+      },
+      post_callback = {
+         ["*"] = function() end
+      },
    }
 end
 
@@ -65,7 +74,7 @@ end
 --- }
 --- @param options_table table
 --- @return table
-local function get_init_tables( options_table )
+local function get_init_tables(options_table)
    local default = get_default_options()
 
    local result = {}
@@ -76,11 +85,28 @@ local function get_init_tables( options_table )
    local pre_callback
    local post_callback
 
+
    if options_table.colorscheme == nil then
       options_table.colorscheme = default.colorscheme
    end
+   if options_table.name_override == nil then
+      options_table.name_override = default.name_override
+   end
+   if options_table.pre_function == nil then
+      options_table.pre_function = default.pre_function
+   end
+   if options_table.post_function == nil then
+      options_table.post_function = default.post_function
+   end
+   if options_table.pre_callback == nil then
+      options_table.pre_callback = default.pre_callback
+   end
+   if options_table.post_callback == nil then
+      options_table.post_callback = default.post_callback
+   end
 
-   for _, colorscheme in ipairs( options_table.colorscheme ) do
+
+   for _, colorscheme in ipairs(options_table.colorscheme) do
       if options_table.name_override[colorscheme] ~= nil then
          name = options_table.name_override[colorscheme]
       else
@@ -92,16 +118,15 @@ local function get_init_tables( options_table )
       elseif options_table.pre_function["*"] ~= nil then
          pre_function = options_table.pre_function["*"]
       else
-         pre_function = default.pre_function
+         pre_function = default.pre_function["*"]
       end
-
 
       if options_table.post_function[colorscheme] ~= nil then
          post_function = options_table.post_function[colorscheme]
       elseif options_table.post_function["*"] ~= nil then
          post_function = options_table.post_function["*"]
       else
-         post_function = default.post_function
+         post_function = default.post_function["*"]
       end
 
       if options_table.pre_callback[colorscheme] ~= nil then
@@ -109,7 +134,7 @@ local function get_init_tables( options_table )
       elseif options_table.pre_callback["*"] ~= nil then
          pre_callback = options_table.pre_callback["*"]
       else
-         pre_callback = default.pre_callback
+         pre_callback = default.pre_callback["*"]
       end
 
       if options_table.post_callback[colorscheme] ~= nil then
@@ -117,10 +142,10 @@ local function get_init_tables( options_table )
       elseif options_table.post_callback["*"] ~= nil then
          post_callback = options_table.post_callback["*"]
       else
-         post_callback = default.post_callback
+         post_callback = default.post_callback["*"]
       end
 
-      vim.list_extend( result, {
+      vim.list_extend(result, {
          {
             colorscheme = colorscheme,
             name = name,
@@ -129,7 +154,7 @@ local function get_init_tables( options_table )
             pre_callback = pre_callback,
             post_callback = post_callback,
          },
-      } )
+      })
    end
    return result
 end
@@ -138,24 +163,41 @@ end
 
 --- this will preview the colorscheme, we execute pre and post functions to
 --- make sure the colorscheme is displayed correcly.
-local function display_colorscheme( colorscheme_params )
+local function display_colorscheme(colorscheme_params)
    colorscheme_params.pre_function()
 
-   vim.cmd( "colorscheme " .. colorscheme_params.colorscheme )
+   vim.cmd("colorscheme " .. colorscheme_params.colorscheme)
 
    colorscheme_params.post_function()
 end
 
 --- when we have selected the colorscheme we call pre and post callbacks, we
 --- also display the colorscheme and save to file
-local function save_colorscheme( colorscheme_params )
+local function save_colorscheme(colorscheme_params)
    colorscheme_params.pre_callback()
 
-   display_colorscheme( colorscheme_params )
+   display_colorscheme(colorscheme_params)
 
    -- TODO: add save to file
 
    colorscheme_params.post_callback()
+end
+
+local function write_to_buf()
+   local lines = {}
+
+   for _, colorscheme_params in ipairs(SETTINGS) do
+      vim.list_extend(lines, {
+         colorscheme_params.name
+      })
+   end
+
+   vim.api.nvim_win_set_cursor(0, { 1, 0 })
+
+   -- get sandwiched
+   vim.api.nvim_set_option_value("modifiable", true, { buf = INTERFACE.buf_id })
+   vim.api.nvim_buf_set_lines(0, 0, 1, false, lines)
+   vim.api.nvim_set_option_value("modifiable", false, { buf = INTERFACE.buf_id })
 end
 
 -- [[ Windows ]]
@@ -163,10 +205,10 @@ end
 --       https://github.com/zaldih/themery.nvim/
 
 local function get_coords()
-   local editor_columns = vim.api.nvim_get_option_value( "columns", {} )
-   local editor_rows = vim.api.nvim_get_option_value( "lines", {} )
+   local editor_columns = vim.api.nvim_get_option_value("columns", {})
+   local editor_rows = vim.api.nvim_get_option_value("lines", {})
    local width = 40
-   local height = 10
+   local height = 15
 
    local result = {
       width = width - 2,
@@ -183,7 +225,7 @@ local function close_win()
       return
    end
 
-   vim.api.nvim_win_close( INTERFACE.win_id, true )
+   vim.api.nvim_win_close(INTERFACE.win_id, true)
    INTERFACE = {
       buf_id = nil,
       win_id = nil,
@@ -191,24 +233,23 @@ local function close_win()
 end
 
 local function setup_win_closing()
-   vim.api.nvim_set_option_value( "bufhidden", "wipe", { buf = INTERFACE.buf_id } )
+   vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = INTERFACE.buf_id })
 
-   vim.api.nvim_create_autocmd( { "WinLeave", "BufLeave" }, {
-      group = vim.api.nvim_create_augroup( PLUGIN_NAME .. "-augroup", { clear = true } ),
+   vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
+      group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-augroup", { clear = true }),
       buffer = INTERFACE.buf_id,
       callback = function()
          close_win()
       end,
       once = true,
-   } )
+   })
 
-   vim.api.nvim_buf_set_keymap( INTERFACE.buf_id, "n", "<ESC>", "", {
-      ft = PLUGIN_NAME,
+   vim.api.nvim_buf_set_keymap(INTERFACE.buf_id, "n", "<ESC>", "", {
       callback = function()
-         vim.api.nvim_buf_del_keymap( INTERFACE.buf_id, "n", "<ESC>" )
+         vim.api.nvim_buf_del_keymap(INTERFACE.buf_id, "n", "<ESC>")
          close_win()
       end,
-   } )
+   })
 end
 
 local function toggle_win()
@@ -232,8 +273,8 @@ local function toggle_win()
       title_pos = "center",
    }
 
-   local buf_id = vim.api.nvim_create_buf( false, true )
-   local win_id = vim.api.nvim_open_win( buf_id, true, opts )
+   local buf_id = vim.api.nvim_create_buf(false, true)
+   local win_id = vim.api.nvim_open_win(buf_id, true, opts)
 
    INTERFACE = {
       buf_id = buf_id,
@@ -242,22 +283,32 @@ local function toggle_win()
 
    setup_win_closing()
 
-   vim.api.nvim_set_option_value( "filetype",   PLUGIN_NAME, { buf = INTERFACE.buf_id } )
-   vim.api.nvim_set_option_value( "modifiable", false,       { buf = INTERFACE.buf_id } )
+   -- buf options
+   vim.api.nvim_set_option_value("filetype", PLUGIN_NAME, { buf = INTERFACE.buf_id })
+   vim.api.nvim_set_option_value("modifiable", false, { buf = INTERFACE.buf_id })
+
+   -- win options
+   vim.api.nvim_set_option_value("cursorline", true, { win = INTERFACE.win_id })
+   vim.api.nvim_set_option_value("scrolloff", 4, { win = INTERFACE.win_id })
+
+   write_to_buf()
 end
 
 
 -- [[ USER INPUT ]]
 
 
-local function setup( opts )
-   local init_tables = get_init_tables( opts )
+local function setup(opts)
+   SETTINGS = get_init_tables(opts)
 
-   -- display_colorscheme( init_tables[1] )
-   -- save_colorscheme( init_tables[1] )
+   -- display_colorscheme( SETTINGS[1] )
+   -- save_colorscheme( SETTINGS[1] )
 
-   vim.keymap.set( "n", "<leader>h", toggle_win )
+   vim.keymap.set("n", "<leader>h", toggle_win)
 end
+
+-- FIXME: remove me
+setup({})
 
 return {
    setup = setup,
