@@ -123,7 +123,7 @@ local function toggle_win()
    end
 
    local size = 0
-   for _, _ in ipairs( constants.COLORSHCEME_PARAMS ) do size = size + 1 end
+   for _, _ in ipairs( constants.COLORSCHEME_PARAMS ) do size = size + 1 end
 
    if row > size then
       row = 1

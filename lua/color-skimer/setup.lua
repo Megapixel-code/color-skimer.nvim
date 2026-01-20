@@ -103,7 +103,7 @@ local function get_colorscheme_params( options_table )
 end
 
 local function setup( opts )
-   constants.COLORSHCEME_PARAMS = get_colorscheme_params( opts )
+   constants.COLORSCHEME_PARAMS = get_colorscheme_params( opts )
 
    utils.retrieve_last_colorscheme()
 
