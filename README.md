@@ -49,9 +49,13 @@ or just use the command ```:ColorSkimerToggle```
 ```lua
 return {
    "Megapixel-code/color-skimer.nvim",
-   opts = {
-      -- config goes here
-   }
+   config = function()
+      require( "color-skimer" ).setup( {
+         -- TODO: config goes here
+      } )
+
+      vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc = "Search themes" } )
+   end,
 }
 ```
 
