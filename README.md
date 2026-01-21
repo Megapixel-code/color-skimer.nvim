@@ -6,8 +6,8 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 
 - [FEATURES](#features)
 - [USAGE](#usage)
-   - [how to interact with the plugin](#1-how-to-interact-with-the-plugin-)
-   - [base binds](#2-base-binds)
+   - [how to interact with the plugin](#how-to-interact-with-the-plugin-)
+   - [base binds](#base-binds)
 - [INSTALLATION](#installation)
    - [lazy](#lazy)
    - [others (untested)](#others-untested)
@@ -28,7 +28,7 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 
 ## USAGE
 
-### 1: how to interact with the plugin ?
+### how to interact with the plugin ?
 with the plugin api :
 ```lua
 local color_skimer_toggle_function = require( "color-skimer" ).toggle
@@ -40,7 +40,7 @@ or just use the command ```:ColorSkimerToggle```:
 vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc = "Search themes" } )
 ```
 
-### 2: base binds
+### base binds
 - movement:
    same way as you would for any other buffer (```j```, ```k```, ```C-U```, ```C-D```, etc...)
 - select and save to memory colorscheme : ```<CR>```
