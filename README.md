@@ -238,7 +238,8 @@ I used themery for a long time. Whilst this plugin is great there are few reason
 - 1: I **need** the post_save_callback hook to update my terminal colors after every colorscheme save
 - 2: I want to be able to have Lua function instead of text blocks that get executed
 - 3: Themery seems to go in the direction of a complete theme manager with a community repertoire. I do not have the need for this and I would rather have a lighter plugin than have that bloat built in (my opinion).
-- 4: To have a bit of fun, this is my first plugin
+- 4: Color-skimer has (in my opinion) better configuration settings
+- 5: To have a bit of fun, this is my first plugin
 
 ## LICENCE
 GPL-3
