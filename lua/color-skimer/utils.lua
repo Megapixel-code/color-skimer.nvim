@@ -43,7 +43,6 @@ end
 local function display_colorscheme( colorscheme_param )
    -- TODO: add verify if we have not aleready displayed this theme
    --       by looking at the current theme
-
    colorscheme_param.pre_function()
 
    vim.cmd( "colorscheme " .. colorscheme_param.colorscheme )
@@ -53,12 +52,12 @@ end
 
 --- when we have selected the colorscheme we call pre and post callbacks, we
 --- also display the colorscheme and save to file
-local function save_colorscheme( colorscheme_param )
-   constants.COLORSCHEME_PARAMS.pre_callback()
+local function save_colorscheme( line )
+   local colorscheme_param = constants.COLORSCHEME_PARAMS[line]
+
+   colorscheme_param.pre_callback()
 
    display_colorscheme( colorscheme_param )
-
-   constants.COLORSCHEME_PARAMS.post_callback()
 
    -- saving the file
    local file_dir = get_data_dir()
@@ -66,12 +65,13 @@ local function save_colorscheme( colorscheme_param )
    local file, err = io.open( file_dir .. "/data", "w" )
 
    if file then
-      local plugin_number = get_colorscheme_id_from_colorscheme( constants.COLORSCHEME_PARAMS.colorscheme )
-      file:write( tostring( plugin_number ) )
+      file:write( tostring( line ) )
       file:close()
    else
       print( "Could not save colorscheme to memory, err :", err )
    end
+
+   colorscheme_param.post_callback()
 end
 
 local function retrieve_last_colorscheme()

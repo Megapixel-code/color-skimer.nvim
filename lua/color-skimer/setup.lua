@@ -28,26 +28,11 @@ local function get_colorscheme_params( options_table )
    local pre_callback
    local post_callback
 
-
-   if options_table.colorscheme == nil then
-      options_table.colorscheme = default.colorscheme
+   for key, _ in ipairs( default ) do
+      if options_table[key] == nil then
+         options_table[key] = default[key]
+      end
    end
-   if options_table.name_override == nil then
-      options_table.name_override = default.name_override
-   end
-   if options_table.pre_function == nil then
-      options_table.pre_function = default.pre_function
-   end
-   if options_table.post_function == nil then
-      options_table.post_function = default.post_function
-   end
-   if options_table.pre_callback == nil then
-      options_table.pre_callback = default.pre_callback
-   end
-   if options_table.post_callback == nil then
-      options_table.post_callback = default.post_callback
-   end
-
 
    for _, colorscheme in ipairs( options_table.colorscheme ) do
       if options_table.name_override[colorscheme] ~= nil then
@@ -105,10 +90,9 @@ end
 local function setup( opts )
    constants.COLORSCHEME_PARAMS = get_colorscheme_params( opts )
 
-   utils.retrieve_last_colorscheme()
+   print( constants.COLORSCHEME_PARAMS[2].pre_function )
 
-   vim.api.nvim_create_user_command( "ColorSkimerToggle", windows.toggle_win,
-                                     { desc = "toggle color-skimer plugin" } )
+   utils.retrieve_last_colorscheme()
 end
 
 return {
