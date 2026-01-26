@@ -1,22 +1,10 @@
 local constants = require( "color-skimer.constants" )
 local utils = require( "color-skimer.utils" )
 
---- function that setup the tables to be read by the rest of the program
---- tables will be set like so:
---- result = {
----    {
----      name = "...",
----      colorscheme = "...",
----      pre_function = function() ... end
----      post_function = function() ... end
----      pre_callback = function() ... end
----      post_callback = function() ... end
----    }
----    ... for every colorscheme
---- }
---- @param options_table table
---- @return table
-local function get_colorscheme_params( options_table )
+--- Function that setup the tables to be read by the rest of the program
+--- @param config config user config
+--- @return COLORSCHEME_PARAMS return table that can be read by the program
+local function get_colorscheme_params( config )
    local default = constants.DEFAULT_CONFIG
 
    local result = {}
@@ -28,46 +16,46 @@ local function get_colorscheme_params( options_table )
    local post_callback
 
    for key, _ in ipairs( default ) do
-      if options_table[key] == nil then
-         options_table[key] = default[key]
+      if config[key] == nil then
+         config[key] = default[key]
       end
    end
 
-   for _, colorscheme in ipairs( options_table.colorscheme ) do
-      if options_table.name_override[colorscheme] ~= nil then
-         name = options_table.name_override[colorscheme]
+   for _, colorscheme in ipairs( config.colorscheme ) do
+      if config.name_override[colorscheme] ~= nil then
+         name = config.name_override[colorscheme]
       else
          name = colorscheme
       end
 
-      if options_table.pre_function[colorscheme] ~= nil then
-         pre_function = options_table.pre_function[colorscheme]
-      elseif options_table.pre_function["*"] ~= nil then
-         pre_function = options_table.pre_function["*"]
+      if config.pre_function[colorscheme] ~= nil then
+         pre_function = config.pre_function[colorscheme]
+      elseif config.pre_function["*"] ~= nil then
+         pre_function = config.pre_function["*"]
       else
          pre_function = default.pre_function["*"]
       end
 
-      if options_table.post_function[colorscheme] ~= nil then
-         post_function = options_table.post_function[colorscheme]
-      elseif options_table.post_function["*"] ~= nil then
-         post_function = options_table.post_function["*"]
+      if config.post_function[colorscheme] ~= nil then
+         post_function = config.post_function[colorscheme]
+      elseif config.post_function["*"] ~= nil then
+         post_function = config.post_function["*"]
       else
          post_function = default.post_function["*"]
       end
 
-      if options_table.pre_callback[colorscheme] ~= nil then
-         pre_callback = options_table.pre_callback[colorscheme]
-      elseif options_table.pre_callback["*"] ~= nil then
-         pre_callback = options_table.pre_callback["*"]
+      if config.pre_callback[colorscheme] ~= nil then
+         pre_callback = config.pre_callback[colorscheme]
+      elseif config.pre_callback["*"] ~= nil then
+         pre_callback = config.pre_callback["*"]
       else
          pre_callback = default.pre_callback["*"]
       end
 
-      if options_table.post_callback[colorscheme] ~= nil then
-         post_callback = options_table.post_callback[colorscheme]
-      elseif options_table.post_callback["*"] ~= nil then
-         post_callback = options_table.post_callback["*"]
+      if config.post_callback[colorscheme] ~= nil then
+         post_callback = config.post_callback[colorscheme]
+      elseif config.post_callback["*"] ~= nil then
+         post_callback = config.post_callback["*"]
       else
          post_callback = default.post_callback["*"]
       end
@@ -98,10 +86,12 @@ local function create_data_file()
    end
 end
 
-local function setup( opts )
-   opts = opts or {}
+--- Initialize the plugin with the user config
+--- @param config config user config
+local function setup( config )
+   config = config or {}
 
-   constants.COLORSCHEME_PARAMS = get_colorscheme_params( opts )
+   constants.COLORSCHEME_PARAMS = get_colorscheme_params( config )
 
    create_data_file()
 

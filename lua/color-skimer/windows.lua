@@ -4,12 +4,21 @@ local utils = require( "color-skimer.utils" )
 -- NOTE: this file is partly inspired by the themery plugin :
 --       https://github.com/zaldih/themery.nvim/
 
-local function get_coords()
+--- @class win_shape
+--- @field width integer width of the window
+--- @field height integer height of the window
+--- @field col integer north-west column coordinate of the window
+--- @field row integer north-west row coordinate of the window
+
+--- Returns a table with the coordinates and size of the window
+--- @return win_shape
+local function get_win_shape()
    local editor_columns = vim.api.nvim_get_option_value( "columns", {} )
    local editor_rows = vim.api.nvim_get_option_value( "lines", {} )
    local width = 40
    local height = 15
 
+   --- @type win_shape
    local result = {
       width = width - 2,
       height = height - 2,
@@ -20,6 +29,7 @@ local function get_coords()
    return result
 end
 
+--- Function to close the window, does nothing if no window is open
 local function close_win()
    if constants.INTERFACE.win_id == nil then
       return
@@ -32,6 +42,7 @@ local function close_win()
    }
 end
 
+--- Function that setup the options and autocmds of the menu window
 local function setup_win_config()
    -- buf options
    vim.api.nvim_set_option_value( "filetype",   constants.PLUGIN_NAME, { buf = constants.INTERFACE.buf_id } )
@@ -60,7 +71,7 @@ local function setup_win_config()
    } )
 end
 
-
+--- Function that setup the future closing of the window and the buffer with autocmds/keymaps
 local function setup_win_closing()
    vim.api.nvim_set_option_value( "bufhidden", "wipe", { buf = constants.INTERFACE.buf_id } )
 
@@ -82,18 +93,21 @@ local function setup_win_closing()
    } )
 end
 
+--- Function that will open/close the menu window
 local function toggle_win()
    if constants.INTERFACE.win_id ~= nil then
       close_win()
       return
    end
    if constants.COLORSCHEME_PARAMS[1] == nil then
+      -- no params, shouldn't happen ?
       return
    end
 
-   local coords = get_coords()
+   local coords = get_win_shape()
 
    -- TODO: feature to override thoses args
+   --- @type vim.api.keyset.win_config
    local opts = {
       style = "minimal",
       relative = "editor",
@@ -121,9 +135,6 @@ local function toggle_win()
 
    -- place the cursor in the right starting position
    local row = utils.get_colorscheme_id_from_memory()
-   if row == 0 then
-      row = 1
-   end
 
    local size = 0
    for _, _ in ipairs( constants.COLORSCHEME_PARAMS ) do size = size + 1 end
