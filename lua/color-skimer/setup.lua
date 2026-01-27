@@ -10,10 +10,10 @@ local function get_colorscheme_params( config )
    local result = {}
 
    local name
-   local pre_function
-   local post_function
-   local pre_callback
-   local post_callback
+   local pre_preview
+   local post_preview
+   local pre_save
+   local post_save
 
    for key, _ in ipairs( default ) do
       if config[key] == nil then
@@ -28,46 +28,46 @@ local function get_colorscheme_params( config )
          name = colorscheme
       end
 
-      if config.pre_function[colorscheme] ~= nil then
-         pre_function = config.pre_function[colorscheme]
-      elseif config.pre_function["*"] ~= nil then
-         pre_function = config.pre_function["*"]
+      if config.pre_preview[colorscheme] ~= nil then
+         pre_preview = config.pre_preview[colorscheme]
+      elseif config.pre_preview["*"] ~= nil then
+         pre_preview = config.pre_preview["*"]
       else
-         pre_function = default.pre_function["*"]
+         pre_preview = default.pre_preview["*"]
       end
 
-      if config.post_function[colorscheme] ~= nil then
-         post_function = config.post_function[colorscheme]
-      elseif config.post_function["*"] ~= nil then
-         post_function = config.post_function["*"]
+      if config.post_preview[colorscheme] ~= nil then
+         post_preview = config.post_preview[colorscheme]
+      elseif config.post_preview["*"] ~= nil then
+         post_preview = config.post_preview["*"]
       else
-         post_function = default.post_function["*"]
+         post_preview = default.post_preview["*"]
       end
 
-      if config.pre_callback[colorscheme] ~= nil then
-         pre_callback = config.pre_callback[colorscheme]
-      elseif config.pre_callback["*"] ~= nil then
-         pre_callback = config.pre_callback["*"]
+      if config.pre_save[colorscheme] ~= nil then
+         pre_save = config.pre_save[colorscheme]
+      elseif config.pre_save["*"] ~= nil then
+         pre_save = config.pre_save["*"]
       else
-         pre_callback = default.pre_callback["*"]
+         pre_save = default.pre_save["*"]
       end
 
-      if config.post_callback[colorscheme] ~= nil then
-         post_callback = config.post_callback[colorscheme]
-      elseif config.post_callback["*"] ~= nil then
-         post_callback = config.post_callback["*"]
+      if config.post_save[colorscheme] ~= nil then
+         post_save = config.post_save[colorscheme]
+      elseif config.post_save["*"] ~= nil then
+         post_save = config.post_save["*"]
       else
-         post_callback = default.post_callback["*"]
+         post_save = default.post_save["*"]
       end
 
       vim.list_extend( result, {
          {
             colorscheme = colorscheme,
             name = name,
-            pre_function = pre_function,
-            post_function = post_function,
-            pre_callback = pre_callback,
-            post_callback = post_callback,
+            pre_preview = pre_preview,
+            post_preview = post_preview,
+            pre_save = pre_save,
+            post_save = post_save,
          },
       } )
    end

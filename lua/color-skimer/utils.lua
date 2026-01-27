@@ -35,11 +35,11 @@ end
 --- make sure the colorscheme is displayed correcly.
 --- @param colorscheme_param colorscheme_param table with the params of the colorscheme to display
 local function display_colorscheme( colorscheme_param )
-   colorscheme_param.pre_function()
+   colorscheme_param.pre_preview()
 
    vim.cmd( "colorscheme " .. colorscheme_param.colorscheme )
 
-   colorscheme_param.post_function()
+   colorscheme_param.post_preview()
 end
 
 --- When we have selected the colorscheme we call pre and post callbacks, we
@@ -49,7 +49,7 @@ local function save_colorscheme( colorscheme_id )
    --- @type colorscheme_param
    local colorscheme_param = constants.COLORSCHEME_PARAMS[colorscheme_id]
 
-   colorscheme_param.pre_callback()
+   colorscheme_param.pre_save()
 
    display_colorscheme( colorscheme_param )
 
@@ -65,7 +65,7 @@ local function save_colorscheme( colorscheme_id )
       print( "Could not save colorscheme to memory, err :", err )
    end
 
-   colorscheme_param.post_callback()
+   colorscheme_param.post_save()
 end
 
 --- Reads the last colorscheme set from memory and displays it

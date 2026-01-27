@@ -24,7 +24,8 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 - **Quick Colorscheme Switching**: Ability to cycle through your colorschemes fast.
 - **Persistent**: Colorscheme stays set across your sessions.
 - **Live Preview**: Preview your colorschemes as you move through your list.
-- **Custom Lua Hooks**: you can define Lua functions to be executed at specific instants. (see [CUSTOM HOOKS](#custom-hooks))
+- **Higly Configurable**: Large amount of specific configurations options available
+- **Custom Lua Hooks**: You can define Lua functions to be executed at specific instants. (see [CUSTOM HOOKS](#custom-hooks))
 - **No dependencies**.
 
 ## USAGE
@@ -70,6 +71,7 @@ use 'Megapixel-code/color-skimer.nvim'
 require( "color-skimer" ).setup( {
    -- config goes here
 } )
+vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc = "Search themes" } )
 ```
 
 Vim-plug :
@@ -78,6 +80,7 @@ Plug 'Megapixel-code/color-skimer.nvim'
 require( "color-skimer" ).setup( {
    -- config goes here
 } )
+vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc = "Search themes" } )
 ```
 
 ## CONFIGURATION
@@ -110,7 +113,7 @@ local options = {
       ["github_dark_default"] = "github",
    },
 
-   pre_function = { -- < this will be called before each preview of the colorscheme
+   pre_preview = { -- < this will be called before each preview of the colorscheme
       ["*"] = function()
          -- you can use the star to execute before each
          -- will execute before displaying colorscheme
@@ -123,14 +126,14 @@ local options = {
          vim.o.background = "light"
       end,
    },
-   post_function = { -- < this will be called after each preview of the colorscheme
+   post_preview = { -- < this will be called after each preview of the colorscheme
       -- same options as pre_function
    },
 
-   pre_callback = { -- < this will be called before we save the colorscheme to memory
+   pre_save = { -- < this will be called before we save the colorscheme to memory
       -- same options as pre_function
    },
-   post_callback = { -- < this will be called after we save the colorscheme to memory
+   post_save = { -- < this will be called after we save the colorscheme to memory
       -- same options as pre_function
       ["*"] = function()
          -- [Example]
@@ -151,7 +154,8 @@ require( "color-skimer" ).setup( options )
 If you give a empty table or no table in setup() the plugin will act as this is your config:
 
 ```lua
-{
+--- @type color_skimer_config
+local options = {
    colorscheme = {
       -- default vim themes
       "blue",
@@ -184,36 +188,38 @@ If you give a empty table or no table in setup() the plugin will act as this is 
 
    name_override = {},
 
-   pre_function = {
+   pre_preview = {
       ["*"] = function() end,
    },
-   post_function = {
+   post_preview = {
       ["*"] = function() end,
    },
 
-   pre_callback = {
+   pre_save = {
       ["*"] = function() end,
    },
-   post_callback = {
+   post_save = {
       ["*"] = function() end,
    },
 }
+
+require( "color-skimer" ).setup( options )
 ```
 
 ## CUSTOM HOOKS
 Color-skimer has great hooks that can be set for all or specific colorschemes. This is the main reason I created this plugin (see [WHY COLOR-SKIMER ?](why-color-skimer-)).
 
 ```lua
-pre_function  > this will be called everytime before the colorscheme is displayed on the screen
-post_function > this will be called everytime after the colorscheme is displayed on the screen
-pre_callback  > this will be called before saving the colorscheme to memory
-post_callback > this will be called after saving the colorscheme to memory
+pre_preview  > this will be called everytime before the colorscheme is displayed on the screen
+post_preview > this will be called everytime after the colorscheme is displayed on the screen
+pre_save     > this will be called everytime before saving the colorscheme to memory
+post_save    > this will be called everytime after saving the colorscheme to memory
 ```
 
 Examples :
 ```lua
 {
-   pre_function = {
+   pre_preview = {
       -- Here it would set nvim in dark mode for every colorscheme
       -- except vscode where set it to light mode
       ["*"] = function()
@@ -223,7 +229,7 @@ Examples :
          vim.o.background = "light"
       end,
    },
-   post_function = {
+   post_preview = {
       ["*"] = function()
          print("we are previewing a colorscheme")
       end,
@@ -232,10 +238,10 @@ Examples :
       end,
    },
 
-   pre_callback = {
+   pre_save = {
       ["*"] = function() end,
    },
-   post_callback = {
+   post_save = {
       ["*"] = function()
          -- message after saving, right before closing the plugin
          print("colorscheme set and saved !")

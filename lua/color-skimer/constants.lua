@@ -10,10 +10,10 @@ PLUGIN_NAME = "color-skimer"
 --- @class color_skimer_config
 --- @field colorscheme string[] array of all of your colorschemes
 --- @field name_override name_override? this will override the name displayed in the preview menu
---- @field pre_function function_field? this will be called before each preview of the colorscheme
---- @field post_function function_field? this will be called after each preview of the colorscheme
---- @field pre_callback function_field? this will be called before we save the colorscheme to memory
---- @field post_callback function_field? this will be called after we save the colorscheme to memory
+--- @field pre_preview function_field? this will be called before each preview of the colorscheme
+--- @field post_preview function_field? this will be called after each preview of the colorscheme
+--- @field pre_save function_field? this will be called before we save the colorscheme to memory
+--- @field post_save function_field? this will be called after we save the colorscheme to memory
 
 --- @type color_skimer_config
 DEFAULT_CONFIG = {
@@ -49,17 +49,17 @@ DEFAULT_CONFIG = {
 
    name_override = {},
 
-   pre_function = {
+   pre_preview = {
       ["*"] = function() end,
    },
-   post_function = {
+   post_preview = {
       ["*"] = function() end,
    },
 
-   pre_callback = {
+   pre_save = {
       ["*"] = function() end,
    },
-   post_callback = {
+   post_save = {
       ["*"] = function() end,
    },
 }
@@ -77,10 +77,10 @@ INTERFACE = {
 --- @class colorscheme_param
 --- @field colorscheme string
 --- @field name string
---- @field pre_function function
---- @field post_function function
---- @field pre_callback function
---- @field post_callback function
+--- @field pre_preview function
+--- @field post_preview function
+--- @field pre_save function
+--- @field post_save function
 
 --- @class COLORSCHEME_PARAMS
 --- @field [integer] colorscheme_param
