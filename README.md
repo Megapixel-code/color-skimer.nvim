@@ -242,7 +242,7 @@ Examples :
    },
    post_save = {
       ["*"] = function()
-         -- message after saving, right before closing the plugin
+         -- message after saving, right before closing the menu window
          print("colorscheme set and saved !")
       end,
    },
