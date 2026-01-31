@@ -11,6 +11,8 @@ local function get_colorscheme_params( opts )
 
    local result = {}
 
+   result.keys = config.keys
+
    local name
    local pre_preview
    local post_preview

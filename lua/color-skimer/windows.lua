@@ -61,8 +61,7 @@ local function setup_win_config()
       end,
    } )
 
-   -- TODO: make it configurable (<CR>)
-   vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", "<CR>", "", {
+   vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", constants.COLORSCHEME_PARAMS.keys.save, "", {
       callback = function()
          local line = vim.api.nvim_win_get_cursor( constants.INTERFACE.win_id )[1]
          utils.save_colorscheme( line )
@@ -85,9 +84,9 @@ local function setup_win_closing()
       once = true,
    } )
 
-   vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", "<ESC>", "", {
+   vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", constants.COLORSCHEME_PARAMS.keys.escape, "", {
       callback = function()
-         vim.api.nvim_buf_del_keymap( constants.INTERFACE.buf_id, "n", "<ESC>" )
+         vim.api.nvim_buf_del_keymap( constants.INTERFACE.buf_id, "n", constants.COLORSCHEME_PARAMS.keys.escape )
          close_win()
       end,
    } )

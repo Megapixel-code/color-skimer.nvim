@@ -7,9 +7,14 @@ PLUGIN_NAME = "color-skimer"
 --- @class function_field
 --- @field [string] function function that will be executed at a specific time
 
+--- @class keys
+--- @field escape string?
+--- @field save string?
+
 --- @class color_skimer_config
 --- @field colorscheme string[] array of all of your colorschemes
 --- @field name_override name_override? this will override the name displayed in the preview menu
+--- @field keys keys? The key that you will use to close the plugin menu window
 --- @field pre_preview function_field? this will be called before each preview of the colorscheme
 --- @field post_preview function_field? this will be called after each preview of the colorscheme
 --- @field pre_save function_field? this will be called before we save the colorscheme to memory
@@ -49,6 +54,13 @@ DEFAULT_CONFIG = {
 
    name_override = {},
 
+   -- The key that you will use to close the plugin menu window.
+   -- Same options as the {lhs} parameter of ':h vim.keymap.set()'
+   keys = {
+      escape = "<ESC>",
+      save = "<CR>",
+   },
+
    pre_preview = {
       ["*"] = function() end,
    },
@@ -84,6 +96,7 @@ INTERFACE = {
 
 --- @class COLORSCHEME_PARAMS
 --- @field [integer] colorscheme_param
+--- @field keys keys?
 
 --- @type COLORSCHEME_PARAMS
 COLORSCHEME_PARAMS = {}
