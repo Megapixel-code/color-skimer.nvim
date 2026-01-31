@@ -22,8 +22,8 @@ PLUGIN_NAME = "color-skimer"
 
 --- @type color_skimer_config
 DEFAULT_CONFIG = {
-   colorscheme = {
-      -- default vim themes
+   colorscheme = { -- < list of your colorschemes names
+      -- The default options are the default vim colorschemes :
       "blue",
       "darkblue",
       "default",
@@ -52,22 +52,26 @@ DEFAULT_CONFIG = {
       "zellner",
    },
 
-   name_override = {},
-
-   -- The key that you will use to close the plugin menu window.
-   -- Same options as the {lhs} parameter of ':h vim.keymap.set()'
-   keys = {
-      escape = "<ESC>",
-      save = "<CR>",
+   name_override = { -- < this will override the name displayed in the preview menu
+      -- [Example]
+      -- The name displayed for the "default" colorscheme will be displayed as "tluafed" in the preview menu
+      -- ["default"] = "tluafed",
    },
 
+   -- Same options as the {lhs} parameter of ':h vim.keymap.set()'
+   keys = {             -- < Redefine some keymaps
+      escape = "<ESC>", -- < The key that you will use to close the plugin menu window.
+      save = "<CR>",    -- < The key that you will use to select and save a colorscheme in the menu window.
+   },
+
+   -- For more informations about the pre_preview, post_preview, pre_save and post_save configurations,
+   -- look at the readme on the [CUSTOM HOOKS] section
    pre_preview = {
       ["*"] = function() end,
    },
    post_preview = {
       ["*"] = function() end,
    },
-
    pre_save = {
       ["*"] = function() end,
    },
