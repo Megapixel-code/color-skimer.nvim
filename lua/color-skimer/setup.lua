@@ -85,11 +85,11 @@ local function create_data_file()
 end
 
 --- Initialize the plugin with the user config
---- @param config color_skimer_config user config
-local function setup( config )
-   config = config or {}
+--- @param opts color_skimer_config user config
+local function setup( opts )
+   opts = opts or {}
 
-   constants.COLORSCHEME_PARAMS = get_colorscheme_params( config )
+   constants.COLORSCHEME_PARAMS = get_colorscheme_params( opts )
 
    create_data_file()
 
