@@ -9,12 +9,12 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
    - [How to interact with the plugin ?](#how-to-interact-with-the-plugin-%3F)
    - [Base binds](#base-binds)
 - [INSTALLATION](#installation)
-   - [lazy](#lazy)
-   - [others (untested)](#others-(untested))
+   - [Lazy](#lazy)
+   - [Others (untested)](#others-untested)
 - [CONFIGURATION](#configuration)
-   - [default config](#default-config-%3A)
-   - [custom hooks](#custom-hooks)
-- [WHY COLOR-SKIMER ?](#why-color-skimer-%3F)
+   - [Default config](#default-config)
+   - [Custom hooks](#custom-hooks)
+- [WHY COLOR-SKIMER ?](#why-color-skimer-)
 - [BONUS](#bonus)
 - [CONTRIBUTING](#contributing)
 - [LICENSE](#license)
@@ -50,7 +50,7 @@ vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc
 
 ## INSTALLATION
 
-### lazy
+### Lazy
 ```lua
 return {
    "Megapixel-code/color-skimer.nvim",
@@ -63,7 +63,7 @@ return {
 }
 ```
 
-### others (untested)
+### Others (untested)
 Packer :
 ```lua
 use 'Megapixel-code/color-skimer.nvim'
@@ -84,7 +84,7 @@ vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc
 
 ## CONFIGURATION
 
-### Default config :
+### Default config
 If you give a empty table or no table in setup() the plugin will act as this is your config:
 
 ```lua
@@ -149,8 +149,8 @@ If you give a empty table or no table in setup() the plugin will act as this is 
 }
 ```
 
-### custom hooks
-Color-skimer has great hooks that can be set for all or specific colorschemes. This is the main reason I created this plugin (see [WHY COLOR-SKIMER ?](#why-color-skimer-%3F)).
+### Custom hooks
+Color-skimer has great hooks that can be set for all or specific colorschemes. This is the main reason I created this plugin (see [WHY COLOR-SKIMER ?](#why-color-skimer-)).
 
 The following custom hooks are available :
 ```lua
