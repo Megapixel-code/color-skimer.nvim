@@ -128,9 +128,9 @@ If you give a empty table or no table in setup() the plugin will act as this is 
 
    -- Same options as the {lhs} parameter of ':h vim.keymap.set()'
    -- NOTE: If the variable is an empty string it won't set the keymap
-   --       That means you wont have a way to interact with the plugin
+   --       That means you might not have a way to interact with the plugin
    keys = {               -- < Redefine some keymaps
-      toggle_plugin = "", -- < Open/Close the plugin menu window, I use "<leader>st" in my config
+      toggle_plugin = "", -- < Open/Close the plugin menu window, Example: I personally use "<leader>st"
       escape = "<ESC>",   -- < Close the plugin menu window.
       save = "<CR>",      -- < Select and save a colorscheme in the menu window.
    },
