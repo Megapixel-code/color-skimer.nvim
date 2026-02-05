@@ -2,12 +2,12 @@
 
 Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change your colorschemes quickly and easily. Inspired by [themery.nvim](https://github.com/zaldih/themery.nvim).
 
-<img 
-    style="display: block; 
+<img
+    style="display: block;
            margin-left: auto;
            margin-right: auto;
            width: 85%;"
-    src="https://github.com/user-attachments/assets/ce493171-aa43-4d1c-897d-745ff1cc9c5f" 
+    src="https://github.com/user-attachments/assets/ce493171-aa43-4d1c-897d-745ff1cc9c5f"
     alt="color-skimer">
 </img>
 
@@ -236,12 +236,15 @@ colorscheme = {
    "rosebones",
    "tokyobones",
    "neobones",
-   "spaceduck",
    "terafox",
    "base16-ashes",
    "base16-kanagawa-dragon",
    "base16-vulcan",
    "base16-tarot",
+   "sunset_cloud",
+   "radioactive_waste",
+   "forest_stream",
+   "crimson_moonlight",
 },
 ```
 
