@@ -58,11 +58,11 @@ local function save_colorscheme( colorscheme_id )
    --- @type colorscheme_param
    local colorscheme_param = constants.COLORSCHEME_PARAMS[colorscheme_id]
 
-   colorscheme_param.pre_save()
-
    display_colorscheme( colorscheme_param )
 
    -- saving the file
+   colorscheme_param.pre_save()
+
    local file_dir = get_data_dir()
    os.execute( "mkdir -p " .. file_dir )
    local file, err = io.open( file_dir .. "/data", "w" )
