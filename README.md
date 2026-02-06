@@ -59,7 +59,7 @@ Or just use the command : ```:ColorSkimerToggle```
 ### Lazy
 ```lua
 return {
-   "Megapixel-code/color-skimer.nvim",
+   "megapixel-code/color-skimer.nvim",
 
    --- @module "color-skimer"
    --- @type color_skimer_config
@@ -72,7 +72,7 @@ return {
 ### Others (untested)
 Packer :
 ```lua
-use 'Megapixel-code/color-skimer.nvim'
+use "megapixel-code/color-skimer.nvim"
 require( "color-skimer" ).setup( {
    -- TODO: config goes here
 } )
@@ -80,7 +80,7 @@ require( "color-skimer" ).setup( {
 
 Vim-plug :
 ```lua
-Plug 'Megapixel-code/color-skimer.nvim'
+Plug "megapixel-code/color-skimer.nvim"
 require( "color-skimer" ).setup( {
    -- TODO: config goes here
 } )
