@@ -75,6 +75,13 @@ local function setup_win_config()
          end,
       } )
    end
+   if constants.COLORSCHEME_PARAMS.keys.random ~= "" then
+      vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", constants.COLORSCHEME_PARAMS.keys.random, "", {
+         callback = function()
+            utils.random_move_cursor()
+         end,
+      } )
+   end
 end
 
 

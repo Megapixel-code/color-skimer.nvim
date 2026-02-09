@@ -17,6 +17,16 @@ end
 
 
 
+--- Returns a random colorscheme id from all of the colorschemes set by the user
+--- @return integer random a random colorscheme id
+local function get_random_colorscheme_id()
+   local size = 0
+   for _, _ in ipairs( constants.COLORSCHEME_PARAMS ) do size = size + 1 end
+   return math.random( size )
+end
+
+
+
 --- Returns the colorscheme id from the file in memory, 1 if file is empty and
 --- last id if the id in the memory is out of bounds
 --- @return integer colorscheme_id last colorscheme set
@@ -87,10 +97,25 @@ end
 
 
 
+--- Moves the cursor randomly in the menu buffer
+local function random_move_cursor()
+   local random_id = get_random_colorscheme_id()
+   vim.api.nvim_win_set_cursor( constants.INTERFACE.win_id, { random_id, 0 } )
+end
+
+
+
+--- Automatically set and save a random colorscheme from the user colorscheme config
+local function set_random_colorscheme()
+   local random_id = get_random_colorscheme_id()
+   save_colorscheme( random_id )
+end
+
+
+
 --- Reads the last colorscheme set from memory and displays it
 local function retrieve_last_colorscheme()
    local row = get_colorscheme_id_from_memory()
-
    display_colorscheme( constants.COLORSCHEME_PARAMS[row] )
 end
 
@@ -127,6 +152,8 @@ end
 return {
    get_colorscheme_id_from_memory = get_colorscheme_id_from_memory,
    save_colorscheme = save_colorscheme,
+   random_move_cursor = random_move_cursor,
+   set_random_colorscheme = set_random_colorscheme,
    retrieve_last_colorscheme = retrieve_last_colorscheme,
    write_to_buf = write_to_buf,
    cursor_moved = cursor_moved,

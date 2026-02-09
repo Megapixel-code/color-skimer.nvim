@@ -11,6 +11,7 @@ PLUGIN_NAME = "color-skimer"
 --- @field toggle_plugin string?
 --- @field escape string?
 --- @field save string?
+--- @field random string?
 
 --- @class color_skimer_config
 --- @field colorscheme string[] array of all of your colorschemes
@@ -63,9 +64,10 @@ DEFAULT_CONFIG = {
    -- NOTE: If the variable is an empty string it won't set the keymap
    --       That means you might not have a way to interact with the plugin
    keys = {               -- < Redefine some keymaps
-      toggle_plugin = "", -- < Open/Close the plugin menu window, Example: I personally use "<leader>sc" (for search colorscheme)
+      toggle_plugin = "", -- < Open/Close the plugin menu window, Example: I personally use "<leader>sc" (for Search Colorscheme)
       escape = "<ESC>",   -- < Close the plugin menu window.
       save = "<CR>",      -- < Select and save a colorscheme in the menu window.
+      random = "r",       -- < Preview a random colorscheme when in the plugin menu window
    },
 
    -- For more information about the pre_preview, post_preview, pre_save and post_save configurations,

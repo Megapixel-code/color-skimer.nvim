@@ -23,6 +23,7 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 - [CONFIGURATION](#configuration)
    - [Default config](#default-config)
    - [Custom hooks](#custom-hooks)
+- [API](#api)
 - [WHY COLOR-SKIMER ?](#why-color-skimer-)
 - [BONUS](#bonus)
 - [CONTRIBUTING](#contributing)
@@ -47,6 +48,8 @@ vim.api.nvim_set_keymap( "n", "<leader>st", "", { callback = color_skimer_toggle
 ```
 
 Or just use the command : ```:ColorSkimerToggle```
+
+Or with the plugin options (see [CONFIGURATION](#configuration))
 
 ### Base binds
 - movement:
@@ -134,9 +137,10 @@ If you give a empty table or no table in setup() the plugin will act as this is 
    -- NOTE: If the variable is an empty string it won't set the keymap
    --       That means you might not have a way to interact with the plugin
    keys = {               -- < Redefine some keymaps
-      toggle_plugin = "", -- < Open/Close the plugin menu window, Example: I personally use "<leader>sc"
+      toggle_plugin = "", -- < Open/Close the plugin menu window, Example: I personally use "<leader>sc" (for Search Colorscheme)
       escape = "<ESC>",   -- < Close the plugin menu window.
       save = "<CR>",      -- < Select and save a colorscheme in the menu window.
+      random = "r",       -- < Preview a random colorscheme when in the plugin menu window
    },
 
    -- For more information about the pre_preview, post_preview, pre_save and post_save configurations,
@@ -201,6 +205,17 @@ Examples :
       end,
    },
 }
+```
+
+## API
+
+The plugin exposes some function to be used by users, here is the list of all of the available functions :
+```lua
+-- Automatically set and save a random colorscheme from the user colorscheme config
+require( "color-skimer" ).set_random_colorscheme()
+
+-- Open/Close the plugin menu window
+require( "color-skimer" ).toggle()
 ```
 
 ## WHY COLOR-SKIMER ?
